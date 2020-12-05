@@ -11,7 +11,8 @@ var server   = require('http').Server(app);
 var io = require('socket.io')(server, {
    cors: {
      origin: 'http://mypwebshost.000webhostapp.com/grafik.php',
-   //   methods: ["GET", "POST", "PUT", "DELETE"],
+     methods: ["GET", "POST"],
+     credentials: true
    },
  });
 
