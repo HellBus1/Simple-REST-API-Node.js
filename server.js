@@ -10,7 +10,7 @@ const app = express();
 var server   = require('http').Server(app);
 var io = require('socket.io')(server, {
    cors: {
-     origin: 'http://mypwebshost.000webhostapp.com/grafik.php',
+     origin: 'http://mypwebshost.000webhostapp.com/',
      methods: ["GET", "POST"],
      credentials: true
    },
@@ -22,6 +22,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // use socket
 app.use(function(req,res,next){
    req.io = io;
+   // Website you wish to allow to connect
+   res.setHeader('Access-Control-Allow-Origin', 'http://mypwebshost.000webhostapp.com/');
+
+   // Request methods you wish to allow
+   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+   // Request headers you wish to allow
+   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+   // Set to true if you need the website to include cookies in the requests sent
+   // to the API (e.g. in case you use sessions)
+   res.setHeader('Access-Control-Allow-Credentials', true);
    next();
 });
 
