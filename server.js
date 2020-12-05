@@ -11,6 +11,8 @@ var server   = require('http').Server(app);
 var io = require('socket.io')(server, {
    cors: {
      origin: '*',
+     methods: ["GET", "POST", "PUT", "DELETE"],
+     redentials: true
    }
  });
 
