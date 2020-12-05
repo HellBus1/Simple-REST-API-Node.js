@@ -10,9 +10,8 @@ app.use(cors());
 var server   = require('http').Server(app);
 var io = require('socket.io')(server, {
    cors: {
-     origin: '*',
+     origin: 'http://mypwebshost.000webhostapp.com/',
      methods: ["GET", "POST", "PUT", "DELETE"],
-     redentials: true
    }
  });
 
