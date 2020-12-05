@@ -6,4 +6,7 @@ module.exports = (app) => {
 
     // Create a candidate
     app.post('/create_candidate', candidate.create);
+
+    // Update a candidate
+    app.put('/update_candidate', candidate.update);
  }
