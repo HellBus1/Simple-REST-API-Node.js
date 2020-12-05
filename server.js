@@ -10,9 +10,9 @@ const app = express();
 var server   = require('http').Server(app);
 var io = require('socket.io')(server, {
    cors: {
-     origin: 'http://mypwebshost.000webhostapp.com/',
+     origin: 'http://mypwebshost.000webhostapp.com/grafik.php',
    //   methods: ["GET", "POST", "PUT", "DELETE"],
-   }
+   },
  });
 
 // parse requests of content-type - application/x-www-form-urlencoded
