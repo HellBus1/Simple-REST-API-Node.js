@@ -5,13 +5,13 @@ var cors = require('cors')
 // create express app
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 
 var server   = require('http').Server(app);
 var io = require('socket.io')(server, {
    cors: {
      origin: 'http://mypwebshost.000webhostapp.com/',
-     methods: ["GET", "POST", "PUT", "DELETE"],
+   //   methods: ["GET", "POST", "PUT", "DELETE"],
    }
  });
 
