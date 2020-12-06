@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <style>
+      .vote-result-wrapper{
+         width: 100%;
+         height: auto;
+      }
+      .card {
+         margin-left: 10%;
+         margin-right: 10%;
+         margin-top: 5%;
+         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      }
+      .buttonContainer {
+         margin-left: 10%;
+         margin-right: 10%;
+         margin-top: 2%;
+         display: flex;
+         flex-direction: row;
+      }
+      td {
+         padding: 1%;
+      }
+   </style>
+   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+</head>
+<body>
+   <div class="vote-result-wrapper">
+      <div class="card">
+         <div class="card-body">
+            <canvas id="vote-result"></canvas>
+         </div>
+      </div>
+   </div>
+
+   <div class="buttonContainer" id="choosePaslon">
+      <table class="table table-bordered" id="university_table">
+         <tbody>
+            <tr id="trs"></tr>
+         </tbody>
+       </table>
+   </div>
+
+   <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+
+   <script>
+      // let getCandidates = 'http://localhost:3000/candidates';
+      let getCandidates = 'https://secret-island-56339.herokuapp.com/';
+      // let updateCandidates = 'http://localhost:3000/update_candidate';
+      let updateCandidates = 'https://secret-island-56339.herokuapp.com/';
+
+      let vote = (id) => {      
+         $.ajax({
+            url: updateCandidates,
+            contentType: "application/x-www-form-urlencoded",
+            dataType: 'json',
+            type: 'POST',
+            data: JSON.stringify({ "candidateId": id }),
+            success: function(result){
+               console.log(result);
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+               console.log( errorThrown );
+            }
+         })
+      }
+
+      window.onload = function () {
+         function loop() {
+            const settings = {
+               async: true,
+               // crossDomain: true,
+               url: getCandidates,
+               method: "GET",
+            };
+
+            $.ajax(settings).done(function (response) {
+               // console.log(response);
+               // Chart Data
+               data = {
+                  labels: [],
+                  datasets: [
+                     {
+                           label: [],
+                           data: [],
+                     }
+                  ]
+               };
+               // console.log(response);
+               for(var i = 0; i<response.length; i++){
+                  // console.log(resdata[i]);
+                  data.labels[i] = response[i]['name'];
+                  data.datasets[0].data[i] = response[i]['count'];
+               }
+
+               context = document.getElementById('vote-result').getContext('2d');
+               myChart = new Chart(context, {
+                  type: 'bar',
+                  data: data,
+                  animation:{ 
+                     animateScale:true
+                  },
+                  options: {
+                     title: {
+                        display: true,
+                        text: 'Quick Count'
+                     },
+                  }
+               });
+            });
+         }
+
+
+         let renderPaslon = () => {
+            const settings = {
+               async: true,
+               // crossDomain: true,
+               url: getCandidates,
+               method: "GET",
+            };
+
+            $.ajax(settings).done(function (response) {
+               for(var i = 0; i<response.length; i++){
+                  // console.log(resdata[i]);
+                  // data.labels[i] = ;
+                  // data.datasets[0].data[i] = response[i]['count'];
+
+                  $('#trs').append(`<td>
+                     <div class="btn btn-primary" onclick="vote('${response[i]['_id']}')">
+                        ${response[i]['name']}
+                        </div></td>`);
+               }         
+            });
+         }
+
+         renderPaslon();
+         loop();
+         
+         setInterval(loop, 5000);
+      };
+
+   </script>
+</body>
+</html>
